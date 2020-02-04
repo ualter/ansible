@@ -1,4 +1,6 @@
 ```
+# macOS
+$ pip3 install ansible
 $ ansible-playbook -i hosts test-ansible.yml
 ```
 
