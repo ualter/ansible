@@ -1,0 +1,13 @@
+---
+- hosts: local
+  become: yes
+  become_user: root
+  tasks:
+    - name: Stop Nginx
+      service:
+          name: nginx  
+          state: stopped
+    - name: Ensure nginx is not installed
+      apt:
+        name: Uninstall Nginx
+        state: absent      

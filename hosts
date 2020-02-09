@@ -1,5 +1,12 @@
 [local]
 127.0.0.1
 
-[local:vars]
-ansible_connection=local
+#[remote]
+#192.168.1.43
+
+#[local:vars]
+#ansible_connection=local
+
+#[remote:vars]
+#ansible_user=Equipo
+#ansible_connection=ssh
