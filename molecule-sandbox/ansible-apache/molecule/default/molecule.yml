@@ -1,0 +1,16 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: centos7
+    image: milcom/centos7-systemd
+    #pre_build_image: true
+    privileged: true
+provisioner:
+  name: ansible
+scenario:
+  name: default  
+verifier:
+  name: testinfra
