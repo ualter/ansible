@@ -19,10 +19,11 @@ $ ansible-playbook -i hosts test-ansible.yml
 $ ansible -i hosts --connection=local local -m ping
 $ ansible-playbook nginx.yaml -i hosts --extra-vars "ansible_sudo_pass=1234" 
 
+# Ansible Galaxy
 # Create a role from Galaxy
 $ ansible-galaxy init nginx
 # Run a role (server.yml)
-$ ansible-playbook -i ../hosts server.yml --extra-vars "ansible_sudo_pass=1234 ansible_become=true"
+$ ansible-playbook -i ../hosts server.yml --extra-vars "ansible_sudo_pass=1234 ansible_become=true"  # Check Below ssh with public keys
 $ ansible-vault create vars/main.yml
 # Initialize a new role with a basic structure
 $ ansible-galaxy init users
@@ -30,6 +31,9 @@ $ ansible-galaxy init users
 $ ansible-galaxy install geerlingguy.php
 $ ansible-galaxy install geerlingguy.redis
 $ ansible-galaxy install geerlingguy.docker
+# Installing a Role from GitHub Source Code
+$ ansible-galaxy install git+https://github.com/geerlingguy/ansible-role-apache.git
+$ ansible-galaxy install git+https://github.com/chrismeyersfsu/provision_docker.git
 # List Roles Locally Installed
 $ ansible-galaxy role list
 # Search Roles at the remote Ansible-Galaxy Repo
@@ -96,10 +100,26 @@ sudo apt install python-backports.functools-lru-cache
 
 ### SSH
 ```bash
+
+# Install SSH Server Ubuntu
+sudo apt-get install openssh-server
+sudo service ssh status
+sudo apt-get install sshpass   # enable the use of the parameter --ask-pass on the ansible execution
+
+## Authorized the connection via Public key
+# Generate a Key Pair at the Master Node
 ssh-keygen -t rsa -C "OS X laptop ssh key"
-ssh-copy-id -i ~/.ssh/id_rsa.pub box1
+# Copy the PubKey to the Target Server
+ssh-copy-id osboxes@127.0.0.1
+# or
 ssh-copy-id -i ~/.ssh/id_rsa.pub Equipo@192.168.2.15
+# This will adds/creastes the pubkey at the ~/.ssh/authorized_keys
+# Using scp
 scp /home/osboxes/.ssh/id_rsa.pub Equipo@192.168.1.43:/Users/Equipo/.ssh
+
+# Test connection
+ansible local -m ping -i hosts -v # With Public Key (the way that should be)
+ansible local -m ping -i hosts -v --ask-pass # In case, for testing, asking the password
 ```
 
 ### AWS SDK CLI
