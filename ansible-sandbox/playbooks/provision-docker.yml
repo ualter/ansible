@@ -1,18 +1,22 @@
 ---
-- name: Bring up docker containers
+- name: Bring up docker containers for Ujr
   hosts: localhost
   gather_facts: false
   vars:
     inventory:
-      - name: iptables_host_1
-        image: "chrismeyers/centos6"
+      - name: docker_ualter
+        image: "chrismeyers/centos7"
   roles:
-    - { role: provision_docker, provision_docker_inventory: "{{inventory}}" }
+    - role: provision_docker
+      provision_docker_inventory: "{{inventory}}"
 
-
-- name: Hello world
+- name: Just a playground playbook
   hosts: docker_containers
+  vars:
+    folder_name: UALTER_JR
+    any_text_value: UALTER_JUNIOR
+  roles:
+    - { role: ujr }
   tasks:
-    - debug:
-        msg:
-        - ”Hello World”
+    - name: Test
+      command: 'echo "hello world"'
