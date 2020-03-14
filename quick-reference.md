@@ -24,7 +24,16 @@ $ ansible-galaxy init nginx
 # Run a role (server.yml)
 $ ansible-playbook -i ../hosts server.yml --extra-vars "ansible_sudo_pass=1234 ansible_become=true"
 $ ansible-vault create vars/main.yml
+# Initialize a new role with a basic structure
 $ ansible-galaxy init users
+# Install a Role form the remote Ansible-Galaxy Repo
+$ ansible-galaxy install geerlingguy.php
+$ ansible-galaxy install geerlingguy.redis
+$ ansible-galaxy install geerlingguy.docker
+# List Roles Locally Installed
+$ ansible-galaxy role list
+# Search Roles at the remote Ansible-Galaxy Repo
+$ ansible-galaxy role search "SOMETHING"
 
 # Run a role (server.yml)
 $ ansible-playbook -i ../hosts server.yml --extra-vars "ansible_sudo_pass=1234 ansible_become=true"

@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: true
+  roles:
+    - ujr
+  vars:
+    - folder_name: ualter_jr
+    - any_text_value: Junior
