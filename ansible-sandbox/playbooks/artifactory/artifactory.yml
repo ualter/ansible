@@ -1,5 +1,5 @@
 ---
-### DOCKER (Where everything will be created, testing...)
+### Provision of a DOCKER Container (where everything will be created, testing...)
 - name: Bring up a Docker for Artifactory
   hosts: localhost
   gather_facts: false
@@ -7,12 +7,18 @@
     inventory:
       - name: ualter_artifactory
         image: "chrismeyers/centos6"
+        ports:
+          - "18081:8081"
+          - "13306:3306"
+        expose:
+          - "18081:8081"
+          - "13306:3306"
   roles:
     - role: provision_docker
       provision_docker_inventory: "{{inventory}}"
 
-### MYSQL
-- name: Install MySQL Dependency
+### Install MYSQL
+- name: Install MySQL
   hosts: docker_containers  
   vars:
   - mysql_user_home: /root
@@ -31,9 +37,22 @@
     - role: geerlingguy.mysql
       become: yes
 
-#- name: Bring up Artifactory
-#  vars:
-#  - artifactory_database: mysql
-#  
-#  roles:
-#     - { role: bbaassssiiee.artifactory }
+### Install Java
+- name: Install Java
+  hosts: docker_containers
+  roles:
+    - role: geerlingguy.java
+      when: "ansible_os_family == 'RedHat'"
+      java_packages:
+        - java-1.8.0-openjdk
+      become: yes
+
+### Install Artifactory      
+- name: Install Artifactory
+  hosts: docker_containers
+  vars:
+   - artifactory_database: mysql
+     mysql_root_password: root
+  roles:
+    - role: ujr-artifactory
+
