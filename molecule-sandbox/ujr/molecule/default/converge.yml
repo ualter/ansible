@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: instance
+  tasks:
+    - name: "Include ujr"
+      include_role:
+        name: "ujr"

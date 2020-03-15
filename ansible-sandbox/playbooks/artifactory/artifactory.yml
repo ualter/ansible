@@ -1,5 +1,7 @@
 ---
-### Provision of a DOCKER Container (where everything will be created, testing...)
+### Playbook I
+### Function...: Provision of a two DOCKER Containers environment for testing
+###
 - name: Bring up a Docker for Artifactory
   hosts: localhost
   gather_facts: false
@@ -34,7 +36,9 @@
         - ualter_
       tags: provision_docker      
 
-### Install MYSQL
+### Playbook II
+### Function...: Install MYSQL at the (so called) primary Docker container
+###
 - name: Install MySQL
   hosts: primary  
   vars:
@@ -54,6 +58,9 @@
     - role: geerlingguy.mysql
       become: yes
 
+### Playbook III
+### Function...: Install Java at the primary and secondary Docker container
+###
 ### Install Java
 - name: Install Java
   hosts: primary:secondary
@@ -64,7 +71,9 @@
         - java-1.8.0-openjdk
       become: yes
 
-### Install Artifactory      
+### Playbook VI
+### Function...: Install MYSQL at the primary Docker container
+###
 - name: Install Artifactory
   hosts: primary
   vars:

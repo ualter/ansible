@@ -73,6 +73,9 @@ $ python3 -m pip install pytest-ansible
 $ python3 -m pip install ansible-lint
 $ python3 -m pip install testinfra
 
+# Dependency Molecule on Ubuntu
+$ sudo apt install -y python-docker
+
 # Creating a new role for test
 molecule init role ansible-apache -d docker
 
@@ -130,10 +133,20 @@ aws s3 rb s3://ualter-817275b --force #delete bucket
 
 ### Troubleshooting
 ```
-# Error
---> Failed to import the required Python library (botocore or boto3) on
-# Solution
+### Error
+--> 
+"Failed to import the required Python library (botocore or boto3) on..."
+
+### Solution
 $ pip install --user boto3 botocore
+```
+```
+### Error
+--> 
+"Failed to import the required Python library (Docker SDK for Python: docker (Python >= 2.7) or docker-py (Python 2.6)) on osboxes's Python /usr/bin/python. Please read module documentation and install in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter, for example via `pip install docker` or `pip install docker-py` (Python 2.6). The error was: No module named docker"
+
+### Solution
+$ sudo apt install -y python-docker
 ```
 
 

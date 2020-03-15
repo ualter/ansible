@@ -1,0 +1,11 @@
+---
+- name: Create a directory if it does not exist
+  file:
+    path: /etc/{{folder_name}}_ansible
+    state: directory
+    mode: '0755'
+  become: yes  
+
+- name: Copy the file to the directory using a template
+  template: src=file.tpl dest=/etc/{{folder_name}}_ansible/file.txt   
+  become: yes   
