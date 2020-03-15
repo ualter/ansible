@@ -13,13 +13,30 @@
         expose:
           - "18081:8081"
           - "13306:3306"
+      - name: ualter_
+        image: "chrismeyers/centos6"
   roles:
     - role: provision_docker
       provision_docker_inventory: "{{inventory}}"
+  tasks:
+    - name: Group primary
+      add_host:
+        hostname: "{{item}}"
+        groups: primary
+      with_items:
+        - ualter_artifactory
+      tags: provision_docker
+    - name: Group secondary
+      add_host:
+        hostname: "{{item}}"
+        groups: secondary
+      with_items:
+        - ualter_
+      tags: provision_docker      
 
 ### Install MYSQL
 - name: Install MySQL
-  hosts: docker_containers  
+  hosts: primary  
   vars:
   - mysql_user_home: /root
     mysql_user_name: root
@@ -39,7 +56,7 @@
 
 ### Install Java
 - name: Install Java
-  hosts: docker_containers
+  hosts: primary:secondary
   roles:
     - role: geerlingguy.java
       when: "ansible_os_family == 'RedHat'"
@@ -49,10 +66,10 @@
 
 ### Install Artifactory      
 - name: Install Artifactory
-  hosts: docker_containers
+  hosts: primary
   vars:
    - artifactory_database: mysql
      mysql_root_password: root
   roles:
-    - role: ujr-artifactory
+    - role: ujr-artifactory    
 
