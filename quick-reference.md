@@ -31,6 +31,8 @@ $ ansible-galaxy init users
 $ ansible-galaxy install geerlingguy.php
 $ ansible-galaxy install geerlingguy.redis
 $ ansible-galaxy install geerlingguy.docker
+# Install Multiple Roles from a File (Requirements)
+$ ansible-galaxy install -r requirements.yml
 # Installing a Role from GitHub Source Code
 $ ansible-galaxy install git+https://github.com/geerlingguy/ansible-role-apache.git
 $ ansible-galaxy install git+https://github.com/chrismeyersfsu/provision_docker.git

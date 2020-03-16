@@ -18,7 +18,7 @@
       - name: ualter_
         image: "chrismeyers/centos6"
   roles:
-    - role: provision_docker
+    - role: chrismeyersfsu.provision_docker
       provision_docker_inventory: "{{inventory}}"
   tasks:
     - name: Group primary
