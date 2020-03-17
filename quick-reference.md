@@ -121,6 +121,8 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub Equipo@192.168.2.15
 # This will adds/creastes the pubkey at the ~/.ssh/authorized_keys
 # Using scp
 scp /home/osboxes/.ssh/id_rsa.pub Equipo@192.168.1.43:/Users/Equipo/.ssh
+# Using nothing
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Test connection
 ansible local -m ping -i hosts -v # With Public Key (the way that should be)

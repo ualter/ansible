@@ -7,7 +7,7 @@
       - name: docker_ualter
         image: "chrismeyers/centos7"
   roles:
-    - role: provision_docker
+    - role: chrismeyersfsu.provision_docker
       provision_docker_inventory: "{{inventory}}"
 
 - name: Just a playground playbook
@@ -16,7 +16,7 @@
     folder_name: UALTER_JR
     any_text_value: UALTER_JUNIOR
   roles:
-    - { role: ujr }
+    - { role: ujr-artifactory }
   tasks:
     - name: Test
       command: 'echo "hello world"'
