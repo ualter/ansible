@@ -1,12 +1,54 @@
 ##Cheat Sheet
 
-### Tools (Install)
+### Ansible / Tools (Install)
 ```
-# macOS install Ansible
+## 1. Install packages and dependencies
+# Ubuntu (Must be here, and very well install, Python!   3 or 2, dependes on the Ansible version, here we go with Python3)
+$ sudo apt-get -y install python3-pip
+# Update pip (just in case)
+$ pip3 install --upgrade pip
+# Install Ansible
 $ pip3 install ansible
-
 # Install Boto3 (AWS Python SDK)
 pip3 install boto boto3
+
+## 2. Install/Config the SSH Server
+# Install OpenSSH (if not) Ansible works connect to servers/locals via SSH 22, if not presented, Ansible will not work
+$ sudo apt-get remove --purge openssh-server
+$ sudo apt-get install openssh-server
+$ sudo service ssh --full-restart
+$ sudo apt-get install sshpass  # in case using the paramater --ask-pass in connections with Ansible
+$ service --status-all # check ssh
+$ ssh user@127.0.0.1 # must work (with your user)
+# On Windows SubsSystem Linux (Ubuntu): 
+#    - Check if the OpenSSH Service of Windows is not using the Port 22 (Firewall Rules Incoming also, check that)
+#    - Install Docker Daemon to work with playbooks that use Docker as Engine (for tests, etc.)
+#    - Install Docker Client on WSL and configures the env variable DOCKER_HOST to tcp://localhost:2375
+#    - Configures Docker Daemon on Windows with tcp://localhost:2375 without TLS (restart it mandatory)
+ 
+## 3. Config the users SSH access with Public Key
+# Generate your SSH Key Pair
+$ ssh-keygen -t rsa -C "ualter"
+# Copy it to the Server (target)
+$ ssh-copy-id ualter@127.0.0.1
+
+## 4. Test connection
+# Test ansible connection with the local (testing Ansible installation, OpenSSH server working, etc.)
+# ...at the file host must be the inventory of Ansible pointing to localhost (for local tests)
+$ ansible local -m ping -i hosts -v # With Public Key (prefered way - check at the hosts file the ansible_user=ualter that is going to be used in the connection)
+# ... the user can be passed as an argument also
+$ ansible local -m ping -i hosts -v --extra-vars "ansible_user=ualter"
+# In case the Public Key not working, for testing with the password (will be requested)
+$ ansible local -m ping -i hosts -v --ask-pass 
+
+# When running playbooks that needs "sudo" (become: true)  
+# Three alternatives
+# 1) Add the user's used by ansible to the sudoers
+$ sudo visudo
+$ ualter ALL=(ALL:ALL) NOPASSWD:ALL
+# 2) Add the info throughout a parameter at the command
+$ --extra-vars "ansible_sudo_pass=password"
+# 3) Add the parameter -K or --ask-pass to ask for the password
 
 # Install Molecule (For Ansible Tests)
 pip3 install molecule
