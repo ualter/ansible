@@ -1,0 +1,44 @@
+---
+### Playbook I
+### Function...: Provision of a one DOCKER Container environment for testing
+###
+- name: Bring up a Docker for Artifactory
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+      - name: ualter_jenkins
+        image: "chrismeyers/centos7"
+        ports:
+          - "18080:8080"
+        expose:
+          - "18080:8080"
+  roles:
+    - role: chrismeyersfsu.provision_docker
+      provision_docker_inventory: "{{inventory}}"
+  tasks:
+    - name: Group primary
+      add_host:
+        hostname: "{{item}}"
+        groups: primary
+      with_items:
+        - ualter_jenkins
+      tags: jenkins_ujr
+                
+
+### Playbook II
+### Function...: Install Jenkins
+###
+- name: Install Jenkins
+  hosts: primary  
+  vars:
+  - jenkins_hostname: localhost
+    __java_packages:
+        - java-1.8.0-openjdk
+    jenkins_java_options: "-Djenkins.install.runSetupWizard=false"
+    jenkins_admin_username: admin
+    jenkins_admin_password: 1234
+    #jenkins_connection_retries: 10
+  roles:
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins

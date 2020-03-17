@@ -1,0 +1,16 @@
+[local]
+127.0.0.1 ansible_user=osboxes
+#127.0.0.1 ansible_user=ualter
+
+[linux_subsystem]
+192.168.1.42 ansible_user=ualter
+
+[local:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[linux_subsystem:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+#[remote:vars]
+#ansible_user=Equipo
+#ansible_connection=ssh

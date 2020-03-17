@@ -88,6 +88,10 @@ $ ansible-playbook -i ../hosts server.yml --extra-vars "ansible_sudo_pass=1234 a
 $ ansible-vault create vars/main.yml
 $ ansible-galaxy init users
 
+
+# Gather Facts of the Hosts
+$ ansible -i hosts local -m setup
+
 # Vault
 # Generate encrypted password for user module
 $ ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"
