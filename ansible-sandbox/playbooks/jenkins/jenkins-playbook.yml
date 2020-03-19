@@ -2,17 +2,22 @@
 ### Playbook I
 ### Function...: Provision of a one DOCKER Container environment for testing
 ###
-- name: Bring up a Docker for Artifactory
+- name: Bring up a Docker Env
   hosts: localhost
   gather_facts: false
   vars:
+    image_name: ualter_jenkins_{{ version | default('packaged') | replace('.','_') }}
     inventory:
-      - name: ualter_jenkins
-        image: "chrismeyers/centos7"
+      - name: "{{image_name}}"
+        image: "{{ 'chrismeyers/centos6' if (version | default('packaged')) <= '1.614' else 'chrismeyers/centos7' }}"
         ports:
-          - "18080:8080"
+          - "{{port}}:8080"
         expose:
-          - "18080:8080"
+          - "{{port}}:8080"
+  pre_tasks:
+    - name: Version...
+      debug:
+        msg: "Linux...: {{inventory[0].name}} - {{inventory[0].image}} - {{version | default('packaged')}}"      
   roles:
     - role: chrismeyersfsu.provision_docker
       provision_docker_inventory: "{{inventory}}"
@@ -22,15 +27,14 @@
         hostname: "{{item}}"
         groups: primary
       with_items:
-        - ualter_jenkins
-      tags: jenkins_ujr
-                
+        - "{{image_name}}"
+      tags: jenkins_ujr_{{version | default('packaged')}}
 
 ### Playbook II
-### Function...: Install Jenkins
+### Function...: Install Jenkins and Java
 ###
 - name: Install Jenkins
-  hosts: primary  
+  hosts: primary
   vars:
   - jenkins_hostname: localhost
     __java_packages:
@@ -39,6 +43,20 @@
     jenkins_admin_username: admin
     jenkins_admin_password: 1234
     #jenkins_connection_retries: 10
+  pre_tasks:
+    - name: Just starts...
+      debug:
+        msg: "Ok, let's do it now"  
+    - name: upgrade all packages
+      yum: name=* state=latest
+    - name: Check packaged or specifically?
+      set_fact:
+        jenkins_version: "{{version}}"
+      when: ({{ version | default('packaged') != 'packaged'}})
+    - name: Jenkins version will be...
+      debug:
+        msg: "{{jenkins_version | default('packaged')}}"  
   roles:
     - role: geerlingguy.java
     - role: geerlingguy.jenkins
+
