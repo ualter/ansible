@@ -10,12 +10,12 @@
       - name: ualter_artifactory
         image: "chrismeyers/centos6"
         ports:
-          - "18081:8081"
-          - "13306:3306"
+          - "{{port_artifact}}:8081"
+          - "{{port_mysql}}:3306"
         expose:
-          - "18081:8081"
-          - "13306:3306"
-      - name: ualter_
+          - "{{port_artifact}}:8081"
+          - "{{port_mysql}}:3306"
+      - name: ualter_java
         image: "chrismeyers/centos6"
   roles:
     - role: chrismeyersfsu.provision_docker
@@ -33,7 +33,7 @@
         hostname: "{{item}}"
         groups: secondary
       with_items:
-        - ualter_
+        - ualter_java
       tags: provision_docker      
 
 ### Playbook II
