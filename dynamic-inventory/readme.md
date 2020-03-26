@@ -34,4 +34,8 @@ ansible tag_Environment_dev -i ec2.py -u ec2-user --private-key ~/.ssh/eu-centra
 
 # Using multiples tags
 ansible "tag_Environment_dev,tag_Environment_prod" -i ec2.py -u ec2-user --private-key ~/.ssh/eu-central-1-ec2-user.pem -m command -a "cat /etc/hosts"
+
+# Using Environment Variables
+export EC2_INSTANCE_FILTERS="tag:Name=webserver,tag:Project=Account"
+
 ```
