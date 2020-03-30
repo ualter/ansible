@@ -1,0 +1,17 @@
+- name: Prepare
+  hosts: all
+  serial: 1 # For a rolling update
+  become: yes
+  vars:
+    target_hosts: "{{ hostvars[inventory_hostname]['ec2_tag_Name'] }}"
+    env: "{{ lookup('gitlab_env', 'ENV', 'CI_COMMIT_REF_NAME') }}"
+  pre_tasks:
+  - name: List target hosts
+    debug:
+      msg: "{{ hostvars[inventory_hostname]['ec2_tag_Name'] }}"
+  - name: List target Env
+    debug:
+        msg: "{{ hostvars[inventory_hostname]['ec2_tag_Environment'] }}"
+  - name: List target Env
+    debug:
+        msg: "{{ hostvars[inventory_hostname]['ansible_facts'] }}"        

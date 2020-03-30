@@ -8,6 +8,11 @@ At Enviroment variables
 chmod +x ec2.py
 ./ec2.py
 
+# Using Environment Variables (when decided to)
+export EC2_INSTANCE_FILTERS=tag:Name=webserver,tag:Project=Account
+export AWS_PROFILE=ecomm
+export EC2_INSTANCE_FILTERS=tag:Environment=uat,tag:Name=services-nonpci-in-services-nonpci-uat-eu-central-1b,tag:Project=services-nonpci
+
 # Using Ansible
 
 # Ping EC2 Instances 
@@ -35,7 +40,10 @@ ansible tag_Environment_dev -i ec2.py -u ec2-user --private-key ~/.ssh/eu-centra
 # Using multiples tags
 ansible "tag_Environment_dev,tag_Environment_prod" -i ec2.py -u ec2-user --private-key ~/.ssh/eu-central-1-ec2-user.pem -m command -a "cat /etc/hosts"
 
-# Using Environment Variables
-export EC2_INSTANCE_FILTERS="tag:Name=webserver,tag:Project=Account"
+
+
+# Running a Playbook with ec2.py
+ansible-playbook -i ec2.py -u ec2-user shark-playbook.yml  --private-key ~/.ssh/ansible-user.pem
+
 
 ```
