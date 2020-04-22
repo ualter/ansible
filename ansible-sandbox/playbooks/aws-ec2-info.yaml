@@ -1,0 +1,42 @@
+---
+  - name: Information about all instances
+    hosts: local
+    connection: local
+
+    tasks:
+      - name: Info EC2 Instances
+        ec2_instance_info:
+          filters:
+            "tag:Name": Ansible
+        no_log: True    
+        register: ec2    
+      - name: List Instances with IP
+        debug: 
+          msg:
+            - "======================================================="
+            - " Instances WITH PUBLIC IP ADDRESS "
+            - "======================================================="
+            - "Instance Id.......: {{ item.instance_id }}"
+            - "Public IP.........: {{ item.public_ip_address }}"
+            - "Public DNS Name...: {{ item.public_dns_name }}"
+            - "State.............: {{ item.state.name }}"
+            - "======================================================="
+        when: item.public_ip_address is defined
+        loop: "{{ ec2.instances }}"
+        loop_control:
+          label: "{{ item.instance_id }} ---->"
+      - name: List Instances without IP    
+        debug: 
+          msg:
+            - "======================================================="
+            - " Instances with NO PUBLIC IP ADDRESS "
+            - "======================================================="
+            - "Instance Id.......: {{ item.instance_id }}"
+            - "Public DNS Name...: {{ item.public_dns_name }}"
+            - "State.............: {{ item.state.name }}"
+            - "======================================================="
+        when: item.public_ip_address is not defined
+        loop: "{{ ec2.instances }}"
+        loop_control:
+          label: "{{ item.instance_id }} ---->"
+

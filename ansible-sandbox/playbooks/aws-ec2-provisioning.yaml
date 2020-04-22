@@ -1,0 +1,26 @@
+---
+  - name: Create a Simple EC2 Instance
+    hosts: local
+    connection: local
+
+    tasks:
+      - name: Create EC2 Instance
+        ec2:
+          region: eu-central-1
+          key_name: eu-central-1-Administrator
+          instance_type: t2.micro
+          image: ami-03ab4e8f1d88ce614
+          wait: yes
+          #group: webserver
+          vpc_subnet_id: subnet-010ab96b
+          assign_public_ip: yes
+          #count: 1
+          count_tag: 
+            Name: Ansible
+          # Use exact_count number to match the number of EC2 Instances with the label Name=Ansible
+          # It will creates or removes the Instances to match this number
+          #  For example: set exact_count to 0 to Terminate all Instance with the label Name=Ansible  
+          exact_count: 0
+          instance_tags:
+            Name: Ansible 
+  
